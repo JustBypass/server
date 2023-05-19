@@ -1,8 +1,8 @@
+#ifndef _CHATMESSAGE_HPP_
+#define _CHATMESSAGE_HPP_
+
 #include <string>
-#include "./imessage.hpp"
-#include "../builders/meter.hpp"
-
-
+#include <boost/enable_shared_from_this.hpp>
 
 // 
 // from:user1,usern\n
@@ -12,14 +12,11 @@
 //
 //
 
-#include "../parser/iparser.hpp"
 /// What pattert
-class chat_message : public imessage
-{
-
+class chat_message :public boost::enable_shared_from_this<chat_message>{
 public:
-    std::string flags();
-
+    chat_message(const chat_message& msg);
+    chat_message& operator=(const chat_message& rhs) ;
 public:
     enum _flag_type
     {
@@ -37,38 +34,24 @@ public:
         MSG_TYPE_EXCEPTION,
         OK
     };
-
 public:
-    std::string from();
-    std::string to();
-    _flag_type get_flag();
-
+    std::string& data(){
+        return data_;
+    }
+    int size(){
+        return data_.size();
+    }
 private:
-    std::string _message;
-    iparser* parser;
-    meter* meter;
-public:
-    void add_flag(_flag_type);
-    void set_to(std::set<std::string>);
-    void set_from(std::string);
+    std::string data_;  
 public:
     bool check_data_length();
-public:
-    chat_message():imessage(){}
-
 private:
-    std::string distributor(std::string from,std::string to_person,responce_flag_type type,std::string _data_){
-         return *meter->get_sizes(from,to,_data_) + "from:" + from + 
-                                                '\n'+"to:" + 
-                                                     to_person + 
-                                                '\n' + 
-                                                "flag:" +  
-                                                                std::string((char*)&type,sizeof(int)) +
-                                                                    "data:'" + 
-                                                                          _data_ + "'";
-    }
+    std::string distributor(std::string from,std::string to,size_t flag,std::string _data_);
 public:
-    chat_message(std::string msg):imessage(msg){}
-    chat_message(std::string from,std::string to,responce_flag_type type,std::string data):imessage(distributor(from,to,type,data)){}
-    chat_message(std::string from,responce_flag_type type,std::string data):imessage(distributor(from,from,type,data)){}
+    chat_message();
+    chat_message(std::string _msg);
+    chat_message(std::string from,std::string to,size_t type,std::string data);
+    chat_message(std::string from,int type,std::string data);
 };
+
+#endif

@@ -1,3 +1,6 @@
+#ifndef _IMESSAGE_HPP_
+#define _IMESSAGE_HPP_
+
 #include <string>
 
 class imessage{
@@ -13,3 +16,5 @@ public:
 private:
     std::string data_;  
 };
+
+#endif
