@@ -12,10 +12,9 @@ private:
     void write(std::string);
     
     void start_reading();
-
 private:
     boost::shared_ptr<chat_room> room;
-
+    std::string name;
 private:
     boost::shared_ptr<chat_message> cur_message;
     boost::shared_ptr<boost::asio::ip::tcp::socket> sock;
@@ -23,6 +22,9 @@ private:
 public:
     boost::shared_ptr<boost::asio::ip::tcp::socket> socket();
     void send(chat_message msg);
+    std::string getName();
+    void setName(std::string name_);
+
 public:
     srv_connection(boost::asio::io_context& ioservice,boost::shared_ptr<chat_room> _room);
     ~srv_connection();

@@ -28,7 +28,7 @@ public:
 private:
     std::map<std::string,shared_connection> attendees;
     std::deque<boost::shared_ptr<chat_message>> messages;
-
+    std::vector<shared_connection> _attendees;
 public:
     void send(boost::shared_ptr<chat_message>,shared_connection);
     void disconnect(shared_connection connection);

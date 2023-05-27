@@ -9,7 +9,7 @@ void open();
 
 void srv_connection::write(std::string msg){
   //  auto self(shared_from_this());
-  std::cout <<"write()";
+  //std::cout <<"write()";
   std::cout <<msg.data() <<std::endl;
   boost::asio::async_write(*sock,
                 boost::asio::buffer(msg, msg.size()),
@@ -17,7 +17,7 @@ void srv_connection::write(std::string msg){
                 {
                   if (!ec) // check the length of header
                   {
-                    std::cout <<"bytes sent\n"; // change here something
+                   // std::cout <<"bytes sent\n"; // change here something
                      boost::asio::async_read(*sock,boost::asio::buffer(_sizes,16),
                        boost::bind(&srv_connection::header,shared_from_this(),boost::asio::placeholders::error));
                   }
@@ -25,19 +25,19 @@ void srv_connection::write(std::string msg){
 }
 
 srv_connection::srv_connection(boost::asio::io_context& ioservice,boost::shared_ptr<chat_room> _room):room(_room),sock(new boost::asio::ip::tcp::socket(ioservice)),cur_message(new chat_message()){
-  std::cout << "srv_connection()" <<std::endl;
+//  std::cout << "srv_connection()" <<std::endl;
 
 };
-    srv_connection::~srv_connection(){
-        std::cout <<"~srv_connection()\n";
-    }
+  srv_connection::~srv_connection(){
+    //  std::cout <<"~srv_connection()\n";
+  }
 boost::shared_ptr<boost::asio::ip::tcp::socket> srv_connection::socket(){
   return sock;
 }
 
 
 void srv_connection::read_body(const boost::system::error_code& ec){
-   std::cout << "read body()\n";
+  //  std::cout << "read body()\n";
 
      if (!ec) // check the length of header
       {
@@ -52,18 +52,18 @@ void srv_connection::read_body(const boost::system::error_code& ec){
 }
 
 void srv_connection::open(){
-  std::cout << "open()" <<std::endl;
+ // std::cout << "open()" <<std::endl;
 
   room->connect(shared_from_this());
     boost::asio::async_read(*sock,boost::asio::buffer(_sizes,16),
       boost::bind(&srv_connection::header,shared_from_this(),boost::asio::placeholders::error));
 
-  std::cout <<"~open()\n";
+ // std::cout <<"~open()\n";
 }
 
 void srv_connection::header(const boost::system::error_code& ec ){
  if(! ec){
-    std::cout << "header()" <<std::endl;
+  //  std::cout << "header()" <<std::endl;
 
     int size = _sizes[0] + _sizes[1] + _sizes[2] + _sizes[3];
     std::cout <<size <<std::endl;
@@ -83,7 +83,15 @@ void srv_connection::send(chat_message msg){
  // bool is_writing; //= !to_write_messages.empty();
   //to_write_messages.push_back(msg);
   //if(!is_writing){
-    std::cout <<" srv_connection send\n";
+    std::cout <<" srv_connection send to " <<name <<'\n';
       write(msg.data());
  // }
+}
+
+
+std::string srv_connection::getName(){
+  return name;
+}
+void srv_connection::setName(std::string name_){
+  name = name_;
 }

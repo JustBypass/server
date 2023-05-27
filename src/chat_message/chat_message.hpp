@@ -26,7 +26,8 @@ public:
         _REQ_ALL,
         _CONNECT,
         _EXIT,
-        _SET_NICKNAME
+        _SET_NICKNAME,
+        _MSG_ALL
     };
     enum responce_flag_type{
         ERROR,
